@@ -4,67 +4,163 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Políticas de Privacidade - Meus Bots</title>
-    <!-- Biblioteca que converte o Markdown (.md) em código HTML puro na tela -->
-    <script src="https://jsdelivr.net"></script>
+    <!-- Link CORRIGIDO para a biblioteca Marked.js (Carregamento rápido) -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         :root {
-            --bg-color: #2f3136;
-            --container-bg: #36393f;
-            --text-color: #dcddde;
-            --text-muted: #72767d;
+            --bg-color: #1e1f22;
+            --container-bg: #2b2d31;
+            --text-color: #dbdee1;
+            --text-muted: #949ba4;
             --accent-color: #5865f2;
             --accent-hover: #4752c4;
-            --border-color: #202225;
+            --border-color: #1e1f22;
+            --card-hover: #313338;
         }
+        
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
             margin: 0;
-            padding: 20px;
+            padding: 0;
             display: flex;
             justify-content: center;
+            min-height: 100vh;
         }
+
         .container {
             width: 100%;
-            max-width: 800px;
+            max-width: 900px;
             background-color: var(--container-bg);
-            border-radius: 8px;
-            padding: 30px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            padding: 40px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            min-height: 100vh;
+            box-sizing: border-box;
         }
-        h1 { color: #fff; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; }
-        .bot-list { list-style: none; padding: 0; margin: 20px 0; }
-        .bot-item {
-            padding: 15px;
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .header h1 {
+            color: #fff;
+            margin: 0 0 10px 0;
+            font-size: 2rem;
+        }
+
+        .header p {
+            color: var(--text-muted);
+            margin: 0;
+            font-size: 1.1rem;
+        }
+
+        /* Design de Cards (Grid) para a lista de bots */
+        .bot-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+
+        .bot-card {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            background-color: var(--bg-color);
             border: 1px solid var(--border-color);
-            border-radius: 6px;
-            margin-bottom: 10px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #fff;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.2s ease;
             cursor: pointer;
-            transition: background 0.2s;
-            font-weight: bold;
         }
-        .bot-item:hover {
-            background-color: rgba(255,255,255,0.05);
+
+        /* Ícone genérico de robô ao lado do nome */
+        .bot-card::before {
+            content: "🤖";
+            font-size: 1.5rem;
+            margin-right: 15px;
+            background: rgba(255,255,255,0.05);
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .bot-card:hover {
+            background-color: var(--card-hover);
+            transform: translateY(-3px);
             border-color: var(--accent-color);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
-        .hidden { display: none; }
+
+        .hidden { display: none !important; }
+
         .btn-back {
-            background-color: var(--accent-color);
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            background-color: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--text-muted);
+            padding: 8px 16px;
+            border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            text-decoration: none;
+            transition: all 0.2s;
         }
-        .btn-back:hover { background-color: var(--accent-hover); }
-        #content-area h1, #content-area h2, #content-area h3 { color: #fff; }
+
+        .btn-back:hover { 
+            background-color: var(--text-muted);
+            color: var(--bg-color);
+        }
+
+        /* Melhorias no visual do texto Markdown */
+        #content-area {
+            line-height: 1.6;
+            font-size: 1.05rem;
+        }
+        #content-area h1, #content-area h2, #content-area h3 { 
+            color: #fff; 
+            margin-top: 1.5em;
+            margin-bottom: 0.5em;
+        }
+        #content-area h1 { border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
         #content-area a { color: var(--accent-color); text-decoration: none; }
         #content-area a:hover { text-decoration: underline; }
-        #content-area ul { padding-left: 20px; }
-        #content-area li { margin-bottom: 5px; }
+        #content-area ul, #content-area ol { padding-left: 20px; margin-bottom: 1.5em; }
+        #content-area li { margin-bottom: 8px; }
+        #content-area strong { color: #fff; }
+        #content-area p { margin-bottom: 1.5em; }
+        
+        /* Estilo para blocos de código se houver nas políticas */
+        #content-area pre, #content-area code {
+            background-color: var(--bg-color);
+            padding: 4px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+        #content-area pre { padding: 15px; overflow-x: auto; }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 600px) {
+            .container { padding: 20px; }
+            .bot-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
@@ -72,23 +168,25 @@
 <div class="container">
     <!-- Tela Inicial: Lista de Bots -->
     <div id="list-view">
-        <h1>Políticas de Privacidade dos Bots</h1>
-        <p style="color: var(--text-muted);">Selecione um bot abaixo para ler as diretrizes:</p>
-        <ul id="bot-links" class="bot-list"></ul>
+        <div class="header">
+            <h1>Políticas de Privacidade</h1>
+            <p>Selecione um bot abaixo para ler as diretrizes de dados.</p>
+        </div>
+        <div id="bot-links" class="bot-grid"></div>
     </div>
 
     <!-- Tela Secundária: Exibição do Markdown -->
     <div id="content-view" class="hidden">
-        <button class="btn-back" onclick="showList()">← Voltar para a lista</button>
+        <a href="#" class="btn-back" onclick="showList(event)">← Voltar para a lista</a>
         <div id="content-area"></div>
     </div>
 </div>
 
 <script>
-    // INDEXAÇÃO AUTOMÁTICA: Sempre que criar um novo arquivo .md na pasta 'politicas/',
-    // adicione o nome exato dele (sem o .md) dentro deste array abaixo:
+    // INDEXAÇÃO AUTOMÁTICA: Adicione o nome exato do arquivo .md aqui
     const BOTS = [
-        "Política de Privacidade - LojaPIX",
+        "LojaPIX",
+        // "OutroBot" 
     ];
 
     const botLinks = document.getElementById('bot-links');
@@ -98,53 +196,72 @@
 
     function init() {
         if (BOTS.length === 0) {
-            botLinks.innerHTML = '<li style="color: var(--text-muted);">Nenhum bot cadastrado.</li>';
+            botLinks.innerHTML = '<p style="color: var(--text-muted); grid-column: 1/-1; text-align: center;">Nenhum bot cadastrado.</p>';
             return;
         }
+
+        // Gera os cards usando tag <a> para funcionar como link real
         BOTS.forEach(botSlug => {
-            const li = document.createElement('li');
-            li.className = 'bot-item';
-            // Converte hífens em espaços e deixa maiúsculo para exibir um nome bonito
+            const a = document.createElement('a');
+            a.className = 'bot-card';
+            a.href = `#${botSlug}`; // Define o link real com a hashtag
+            
             const displayName = botSlug.replace(/-/g, ' ').replace(/(^\w|\s\w)/g, m => m.toUpperCase());
-            li.textContent = displayName;
-            li.onclick = () => loadPrivacyPolicy(botSlug);
-            botLinks.appendChild(li);
+            a.textContent = displayName;
+            
+            botLinks.appendChild(a);
         });
 
-        // Permite abrir direto pelo link se contiver a hashtag (ex: seupoint.github.io/#exemplo-bot)
-        if(window.location.hash) {
-            const hashValue = window.location.hash.replace('#', '');
-            if(BOTS.includes(hashValue)) loadPrivacyPolicy(hashValue);
+        // Escuta as mudanças de link (Hash) para ativar o botão voltar do navegador
+        window.addEventListener('hashchange', handleRoute);
+        
+        // Verifica a rota no momento em que a página carrega
+        handleRoute();
+    }
+
+    // Função que gerencia o que mostrar baseado na URL (se tem # ou não)
+    function handleRoute() {
+        const hashValue = window.location.hash.replace('#', '');
+        
+        if (hashValue && BOTS.includes(hashValue)) {
+            loadPrivacyPolicy(hashValue);
+        } else {
+            showListView();
         }
     }
 
     async function loadPrivacyPolicy(botSlug) {
+        listView.classList.add('hidden');
+        contentView.classList.remove('hidden');
+        contentArea.innerHTML = "<div class='loading'>Carregando política de privacidade...</div>";
+        
         try {
-            contentArea.innerHTML = "<p>Carregando política de privacidade...</p>";
-            showContent();
-            window.location.hash = botSlug;
-
-            const response = await fetch(`politicas/${botSlug}.md`);
+            // Garante que o fetch não use cache do github pages imediatamente
+            const response = await fetch(`politicas/${botSlug}.md?t=${new Date().getTime()}`);
             if (!response.ok) throw new Error();
 
             const markdownText = await response.text();
             contentArea.innerHTML = marked.parse(markdownText);
         } catch (error) {
-            contentArea.innerHTML = `<p style="color: #ff3333;">Erro: Não encontramos o arquivo "politicas/${botSlug}.md".</p>`;
+            contentArea.innerHTML = `
+                <div style="text-align:center; padding: 40px;">
+                    <h2 style="color: #ed4245;">Erro ao carregar</h2>
+                    <p style="color: var(--text-muted);">Não encontramos o arquivo <strong>politicas/${botSlug}.md</strong>.</p>
+                </div>`;
         }
     }
 
-    function showContent() {
-        listView.classList.add('hidden');
-        contentView.classList.remove('hidden');
+    function showList(event) {
+        if(event) event.preventDefault(); // Impede o link de pular a tela
+        window.location.hash = ''; // Limpa a hashtag da URL (dispara o handleRoute)
     }
 
-    function showList() {
+    function showListView() {
         listView.classList.remove('hidden');
         contentView.classList.add('hidden');
-        window.location.hash = '';
     }
 
+    // Inicia o script
     init();
 </script>
 </body>
